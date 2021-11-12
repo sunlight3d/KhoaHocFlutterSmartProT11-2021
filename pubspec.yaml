@@ -63,6 +63,8 @@ flutter:
     - assets/welcome.png
     - assets/wallpaper.jpeg
     - assets/forward.png
+    - assets/back.png
+    - assets/menu.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

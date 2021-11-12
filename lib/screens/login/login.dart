@@ -16,7 +16,6 @@ class _LoginState extends State<Login> {
   //validate !
   @override
   Widget build(BuildContext context) {
-
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Stack(
@@ -28,7 +27,6 @@ class _LoginState extends State<Login> {
             ),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(color: Colors.red),
           ),
           Container(
             child: Column(
@@ -93,7 +91,7 @@ class _LoginState extends State<Login> {
                         TextField(
                           style: TextStyle(color: Colors.white),
                           cursorColor: MyColors.light,
-                          obscureText: true,
+                          obscureText: true,//display *** when user types
                           enableSuggestions: false,
                           autocorrect: false,
                           onChanged: (typedText) {

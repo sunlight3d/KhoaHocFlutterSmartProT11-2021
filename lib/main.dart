@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       //home: Welcome(),
-      home: Login(),
+      //home: Login(),
+      home: Favorites(),
     );
   }
 }
