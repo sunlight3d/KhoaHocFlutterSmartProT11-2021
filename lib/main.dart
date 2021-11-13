@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_app/constants/constants.dart';
 import 'package:training_app/screens/screens.dart';
 
 //each screen = widget
@@ -10,13 +11,24 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+  /*
+  - Calendar, combo-box => dang popup list.VD: chon quoc gia
+  - Group button.Eg: Choose Gender && choose other radio buttons
+  * */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Traing App',
+      initialRoute: '/',
+      routes: {
+        ScreenNames.welcome: (context) => const Welcome(),
+        ScreenNames.login: (context) => Login(),
+        ScreenNames.favorites: (context) => const Favorites(),
+        ScreenNames.appTab: (context) => const AppTab(),
+      },
       //home: Welcome(),
       //home: Login(),
-      home: Favorites(),
+      home: Welcome(),
     );
   }
 }

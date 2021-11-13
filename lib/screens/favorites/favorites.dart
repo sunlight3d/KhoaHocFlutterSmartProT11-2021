@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/constants/images.dart';
 import 'package:training_app/models/models.dart';
+import 'package:training_app/repositories/repositories.dart';
+import 'package:training_app/repositories/student_repository.dart';
 import 'package:training_app/screens/favorites/favorite_item.dart';
+import 'package:training_app/screens/favorites/student_list_item.dart';
+import 'package:training_app/screens/favorites/weather_list.dart';
 import 'package:training_app/utilities/utilities.dart';
 import 'package:training_app/widgets/widgets.dart';
 
@@ -23,52 +27,50 @@ class Favorites extends StatefulWidget {
 
 class _FavoritesState extends State<Favorites> {
   //map Objects to UI
+  //states(not null)
+  bool _isLoading = false;
+  List<Weather> _weathers = []; //initial state
+  List<Student> _students = [];
+  String _errorMessage = '';
   List<Favorite> _favorites = [
     Favorite(icon: Icons.lock, content: 'Go camping'),
     Favorite(icon: Icons.one_k_outlined, content: 'Go fishing'),
     Favorite(icon: Icons.one_k_plus_rounded, content: 'Play football'),
   ];
-  List<Student> _students = [
-    Student(
-        name: 'Nguyen Duc Hoang',
-        email: 'hoang@gmail.com',
-        slogan: 'Think first',
-        url: 'https://www.thesprucepets.com/thmb/FpAKHIGPMDpX6sHu_Oa2QKaJJzY=/1080x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/33425933_857929994407980_2290790978497282048_n-5b266393eb97de0036658c65.jpg',
-    ),
-    Student(
-      name: 'Nguyedsdfsdn Duc Hoang',
-      email: 'hoang@gmail.com',
-      slogan: ' as soosn as possible',
-      url: 'https://d17fnq9dkz9hgj.cloudfront.net/uploads/2012/11/147698488-cat-allergies-632x475-112x84.jpg',
-    ),
-    Student(
-      name: 'Nguyeween Duc Hoang',
-      email: 'hoang@gmail.com',
-      slogan: 'Best quality',
-      url: 'https://d17fnq9dkz9hgj.cloudfront.net/uploads/2012/11/140447576-tips-for-first-30-days-cat-632x475-112x84.jpg',
-    ),
-    Student(
-      name: 'Nguyen Duc Hoang',
-      email: 'hoang@gmail.com',
-      slogan: 'low price',
-      url: 'https://d17fnq9dkz9hgj.cloudfront.net/uploads/2012/11/99233806-bringing-home-new-cat-632x475.jpg',
-    ),
-    Student(
-      name: 'Nguewe2wyen Duc Hoang',
-      email: 'hoang@gmail.com',
-      slogan: 'bigger is good',
-      url: 'https://www.thesprucepets.com/thmb/2NMlovy8LQ0C-knQJToYgAMtM30=/1800x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/why-cats-are-better-than-dogs-554880-04-d48b5438e36345b79daf60c486181aeb.jpg',
-    ),
-    Student(
-      name: 'Nguybfgen Duc Hoang',
-      email: 'hoang@gmail.com',
-      slogan: 'think differentn',
-      url: 'https://www.thesprucepets.com/thmb/2NMlovy8LQ0C-knQJToYgAMtM30=/1800x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/why-cats-are-better-than-dogs-554880-04-d48b5438e36345b79daf60c486181aeb.jpg',
-    )
-  ];
+
   List<Favorite> get _selectedFavorites => _favorites
       .where((element) => element.isSelected == true)
       .toList();
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _weathers = WeatherRepository.instance.getWeathers(); //sync
+    });
+    print('kaka1');
+    setState(() {
+      _isLoading = true;
+    });
+    StudentRepository.instance.getStudents(x: 1)
+          .then((responseStudents) {
+        setState(() {
+          print('kaka3');
+          _students = responseStudents;
+          _isLoading = false;
+        });
+    }).catchError((errorDetail) {
+      //Bam Camping => this code will run ? navigation lesson
+      setState(() {
+        print('kaka3');
+        _students = [];
+        _isLoading = false;
+        _errorMessage = errorDetail;
+        alert(context: context, title: 'Error', content: _errorMessage);
+      });
+    }); //async
+
+    print('kaka2');
+  }
   @override
   Widget build(BuildContext context) {
     /*
@@ -87,6 +89,8 @@ class _FavoritesState extends State<Favorites> {
     - We will NOT call API now
     - Customize ListItem
     * */
+    final user = ModalRoute.of(context)!.settings.arguments as User;
+    print('ahah');
     return Scaffold(
         body: SafeArea(
           child: Container(
@@ -95,7 +99,8 @@ class _FavoritesState extends State<Favorites> {
                 Header(
                   leftIcon: MyIcons.back,
                   onPressLeftIcon: () {
-                    print('onPressLeftIcon');
+                    //print('onPressLeftIcon');
+                    Navigator.pop(context);
                   },
                   rightIcon: MyIcons.menu,
                   onPressRightIcon: () {
@@ -111,6 +116,7 @@ class _FavoritesState extends State<Favorites> {
                         onTap:() {
                           //change state
                           print('haha');
+                          Navigator.pushNamed(context, ScreenNames.appTab);
                           final List<Favorite> updatedFavorites = _favorites.map((item) {
                             if(item.icon == eachFavorite.icon) {
                               item.isSelected = !(item.isSelected ?? false);
@@ -127,6 +133,7 @@ class _FavoritesState extends State<Favorites> {
                   ))
                       .toList(),
                 ),
+                WeatherList(weathers: _weathers,),
                 Container(
                   child: Row(
                     children: [
@@ -136,39 +143,28 @@ class _FavoritesState extends State<Favorites> {
                   padding: EdgeInsets.all(10),
                 ),
                 Expanded(
-                    child: ListView.builder(
+                    child: _isLoading == true ? Loading(title: 'Loading students')
+                    : ListView.builder(
                         itemCount: _students.length,
                         itemBuilder: (context, index) {
                           Student student = _students[index];
-                          return Container(
-                            child: Row(
+                          return InkWell(
+                            child: Column(
                               children: [
-                                ClipRRect(
-                                  child: Image.network(
-                                    student.url ?? '',
-                                    width: 80.0,
-                                    height: 80.0,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(40),
+                                StudentListItem(
+                                  student: student,
+                                  index: index,
                                 ),
-                                SizedBox(width: 10),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(student.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                                    Row(
-                                      children: [
-                                        Text('says: '),
-                                        Text(student.slogan ?? '',style: TextStyle(color: Colors.red),)
-                                      ],
-                                    )
-                                  ],
+                                Container(
+                                  height: 1,
+                                  width: MediaQuery.of(context).size.width - 20,
+                                  color: MyColors.primary,
                                 )
                               ],
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            onTap: () {
+                              print('tap to item: ${index}');
+                            },
                           );
                         })
                 )

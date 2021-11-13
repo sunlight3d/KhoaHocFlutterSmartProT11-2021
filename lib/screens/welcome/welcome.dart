@@ -97,7 +97,8 @@ class _WelcomeState extends State<Welcome> {
                 padding: EdgeInsets.symmetric(vertical: 15),
               ),
               onTap: (){
-                print('you press login');
+                //print('you press login');
+                Navigator.pushNamed(context, ScreenNames.login);
               },
             ),
             Container(

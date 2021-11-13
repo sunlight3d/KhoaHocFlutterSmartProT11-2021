@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/constants/images.dart';
+import 'package:training_app/models/models.dart';
 import 'package:training_app/utilities/utilities.dart';
 class Login extends StatefulWidget {
   //cannot access state(email, password) here !
@@ -157,10 +158,22 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         onTap: () {
-                          if(emailError == '' && passwordError == '') {
+                          if(emailError == ''
+                              && passwordError == ''
+                              && email.trim().length > 0
+                              && password.length > 0
+                          ) {
                             print('email = ${email}, password = ${password}');
+                            Navigator.pushNamed(context,
+                                ScreenNames.favorites,
+                                arguments: User(email: email, password: password)
+                            );
+
                           } else {
-                            print('Please input valid email/password');
+                            alert(context: context,
+                                title: 'Invalid',
+                                content: 'Please input valid email/password'
+                            );
                           }
                         },
                       ),
