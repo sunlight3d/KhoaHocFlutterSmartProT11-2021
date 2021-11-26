@@ -10,9 +10,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  String email = '';//this is state, internal, private
+  String email = 'hoang@gmail.com';//this is state, internal, private
   String emailError = '';
-  String password = '';//this is state, internal, private
+  String password = '123456';//this is state, internal, private
   String passwordError = '';
   //validate !
   @override
@@ -164,10 +164,13 @@ class _LoginState extends State<Login> {
                               && password.length > 0
                           ) {
                             print('email = ${email}, password = ${password}');
+                            /*
                             Navigator.pushNamed(context,
                                 ScreenNames.favorites,
                                 arguments: User(email: email, password: password)
                             );
+                             */
+                            //must push to AppTab, inside AppTab, there are 4 sub-screens
 
                           } else {
                             alert(context: context,

@@ -4,6 +4,7 @@ import 'package:training_app/constants/images.dart';
 import 'package:training_app/models/models.dart';
 import 'package:training_app/repositories/repositories.dart';
 import 'package:training_app/repositories/student_repository.dart';
+import 'package:training_app/repositories/weather_repository.dart';
 import 'package:training_app/screens/favorites/favorite_item.dart';
 import 'package:training_app/screens/favorites/student_list_item.dart';
 import 'package:training_app/screens/favorites/weather_list.dart';
@@ -65,7 +66,7 @@ class _FavoritesState extends State<Favorites> {
         _students = [];
         _isLoading = false;
         _errorMessage = errorDetail;
-        alert(context: context, title: 'Error', content: _errorMessage);
+        //alert(context: context, title: 'Error', content: _errorMessage);
       });
     }); //async
 
@@ -89,7 +90,12 @@ class _FavoritesState extends State<Favorites> {
     - We will NOT call API now
     - Customize ListItem
     * */
-    final user = ModalRoute.of(context)!.settings.arguments as User;
+    //final user = ModalRoute.of(context)!.settings.arguments as User;
+    if(ModalRoute.of(context)!.settings.arguments is! Null) {
+      User? user = ModalRoute.of(context)!.settings.arguments as User;
+      //print('email = ${user?.email ?? ''}');
+    }
+
     print('ahah');
     return Scaffold(
         body: SafeArea(
