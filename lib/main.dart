@@ -25,12 +25,15 @@ class MyApp extends StatelessWidget {
         ScreenNames.login: (context) => Login(),
         ScreenNames.favorites: (context) => const Favorites(),
         ScreenNames.appTab: (context) => const AppTab(),
+        ScreenNames.qrScan: (context) => const QRScan(),
+
       },
       //home: Welcome(),
+      home: Barcode()
       //home: Login(),
       //home: Welcome(),
       //home: Country(),
-      home:AppTab()
+      //home:AppTab()
     );
   }
 }

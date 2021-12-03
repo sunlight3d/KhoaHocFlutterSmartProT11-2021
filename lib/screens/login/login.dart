@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/constants/images.dart';
 import 'package:training_app/models/models.dart';
+import 'package:training_app/repositories/repositories.dart';
 import 'package:training_app/utilities/utilities.dart';
 class Login extends StatefulWidget {
   //cannot access state(email, password) here !
@@ -12,9 +13,26 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String email = 'hoang@gmail.com';//this is state, internal, private
   String emailError = '';
-  String password = '123456';//this is state, internal, private
+  String password = 'Abc123456@';//this is state, internal, private
   String passwordError = '';
   //validate !
+  /*
+    - save data to sqlite: save username/token key
+  */
+  final _txtEmailController = TextEditingController();
+  final _txtPasswordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _txtEmailController.text = email;
+    _txtPasswordController.text = password;
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _txtEmailController.dispose();
+    _txtPasswordController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -22,7 +40,7 @@ class _LoginState extends State<Login> {
       body: Stack(
         children: [
           Container(
-            child: Image(
+            child: const Image(
               image: MyImages.wallpaper,
               fit: BoxFit.cover,
             ),
@@ -34,7 +52,7 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Login',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -42,13 +60,14 @@ class _LoginState extends State<Login> {
                       fontWeight: FontWeight.bold,
                       fontSize: FontSizes.h2),
                 ),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 Stack(
                   children: [
                     Column(
                       children: [
                         TextField(
-                          style: TextStyle(color: Colors.white),
+                          controller: _txtEmailController,
+                          style: const TextStyle(color: Colors.white),
                           cursorColor: MyColors.light,
                           keyboardType: TextInputType.emailAddress,
                           onChanged: (typedText) {
@@ -88,8 +107,9 @@ class _LoginState extends State<Login> {
                           ),
                           margin: EdgeInsets.symmetric(horizontal: 10),
                         ),
-                        SizedBox(height: 5,),
+                        const SizedBox(height: 5,),
                         TextField(
+                          controller: _txtPasswordController,
                           style: TextStyle(color: Colors.white),
                           cursorColor: MyColors.light,
                           obscureText: true,//display *** when user types
@@ -158,26 +178,50 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         onTap: () {
-                          if(emailError == ''
+                          final isValid = emailError == ''
                               && passwordError == ''
                               && email.trim().length > 0
-                              && password.length > 0
-                          ) {
-                            print('email = ${email}, password = ${password}');
-                            /*
-                            Navigator.pushNamed(context,
-                                ScreenNames.favorites,
-                                arguments: User(email: email, password: password)
-                            );
-                             */
-                            //must push to AppTab, inside AppTab, there are 4 sub-screens
+                              && password.length > 0;
+                          if(isValid == true) {
+                            UserRepository.instance
+                                .login(email: email, password: password)
+                                .then((loggedInUser) {
+                                  /*
+                                  - after login, save user information
+                                  (email, id, tokenKey, no PASSWORD) to local storage
+                                  - LocalStorage(Native) => SharedPreferences(Android) + CoreData,UserDefault(ios)
+                                  - Restart app, check login => navigate to AppTab
+                                  * */
+                                  /*
+                                  Navigator.pushNamed(context,
+                                      ScreenNames.favorites,
+                                      //for testing
+                                      arguments: User(email: email, password: password)
+                                  );
+                                   */
+                                  UserRepository.instance
+                                      .saveToLocalStorage(user: User(
+                                      email: email,
+                                      password: password,
+                                      tokenKey: loggedInUser.tokenKey,
+                                      permission: loggedInUser.permission,
+                                      userName: loggedInUser.userName
+                                  )).then((value) {
+                                    Navigator.pushNamed(context, ScreenNames.appTab);
+                                  }).catchError((error){
 
+                                  });
+                                  //sava sqlite => call
+                            }).catchError((error) {
+                              print('haha');
+                            });
                           } else {
                             alert(context: context,
                                 title: 'Invalid',
                                 content: 'Please input valid email/password'
                             );
                           }
+
                         },
                       ),
                       right: 20,

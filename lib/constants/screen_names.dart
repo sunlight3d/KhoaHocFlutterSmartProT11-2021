@@ -5,4 +5,5 @@ class ScreenNames {
   static const login = '/Login';
   static const favorites = '/Favorites';
   static const appTab = '/AppTab';
+  static const qrScan = '/QRScan';
 }

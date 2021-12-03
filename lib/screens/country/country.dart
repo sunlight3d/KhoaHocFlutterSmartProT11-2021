@@ -13,41 +13,51 @@ class Country extends StatefulWidget {
 }
 
 class _CountryState extends State<Country> {
-  final _selectedCountry = CountryModel.Country(countryName: 'Vietnam', code: 'VN');
+  //state
+  var _selectedCountry = CountryModel.Country(countryName: 'Vietnam', code: 'VN');
+  void updateSelectedCountry({
+    required CountryModel.Country selectedCountry
+  }) {
+    setState(() {
+      _selectedCountry = selectedCountry;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
       body: Scaffold(
         body: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              Text('What is your country'),
+              const Text('What is your country'),
               //Inkwell
               GestureDetector(
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
                       Text(_selectedCountry.countryName),
                       Expanded(child: Container()),
                       Text(_selectedCountry.code),
-                      SizedBox(width: 5,),
-                      Icon(
+                      const SizedBox(width: 5,),
+                      const Icon(
                         Icons.ondemand_video,
                         size: 15,
                         color: MyColors.primary,
                       )
                     ],
                   ),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: MyColors.secondary,
                   ),
                 ),
                 onTap: () {
-                  print('choose country');
                   showDialog(context: context,
-                      builder: (BuildContext context) => SelectCountry());
+                      builder: (BuildContext context) => SelectCountry(
+                          //updateSelectedCountry is a "function ref"
+                          updateSelectedCountry: updateSelectedCountry
+                      ));
                 },
               )
             ],

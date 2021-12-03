@@ -8,6 +8,7 @@ import 'package:training_app/screens/favorites/favorite_item.dart';
 import 'package:training_app/screens/favorites/favorites.dart';
 import 'package:training_app/screens/favorites/student_list_item.dart';
 import 'package:training_app/screens/favorites/weather_list.dart';
+import 'package:training_app/screens/profile/profile.dart';
 import 'package:training_app/utilities/utilities.dart';
 import 'package:training_app/widgets/widgets.dart';
 import 'package:training_app/models/country.dart' as CountryModel; //alias
@@ -23,13 +24,28 @@ class _AppTabState extends State<AppTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    final aCountryObject = CountryModel.Country(countryName: "aff", code: 'dd');
   }
+  final List<Map<String, dynamic>> _tabs = [
+    {
+      'text': 'Favorites',
+      'icon': const Icon(Icons.euro_symbol),
+      'screen': const Favorites(),
+    },
+    {
+    'text': 'Country',
+    'icon': const Icon(Icons.assignment),
+    'screen': const Country(),
+    },
+    {
+    'text': 'Profile',
+    'icon': const Icon(Icons.eleven_mp_sharp),
+    'screen': const Profile(),
+    }
+  ];
   @override
   Widget build(BuildContext context) {
-    print('app tab');
     return DefaultTabController(
-      length: 2,
+      length: _tabs.length,
       child: Scaffold(
         appBar: null,
         bottomNavigationBar: Container(
@@ -38,25 +54,16 @@ class _AppTabState extends State<AppTab> {
             labelColor: Colors.white,
             //unselectedLabelColor: Colors.white70,
             indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: EdgeInsets.all(5.0),
+            indicatorPadding: const EdgeInsets.all(5.0),
             indicatorColor: Colors.white,
-            tabs: [
-              Tab(
-                text: "Favorites",
-                icon: Icon(Icons.euro_symbol),
-              ),
-              Tab(
-                text: "Country",
-                icon: Icon(Icons.assignment),
-              ),
-            ],
+            tabs: _tabs.map((eachTab) => Tab(
+              text: eachTab['text'],
+              icon: eachTab['icon']
+            )).toList(),
           ),
         ),
         body: TabBarView(
-          children: [
-            Favorites(),
-            Country()
-          ],
+          children: _tabs.map((eachTab) => eachTab['screen'] as Widget).toList(),
         ),
       ),
     );

@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/constants/images.dart';
 import 'package:training_app/models/models.dart';
+import 'package:training_app/repositories/repositories.dart';
 
 //public
 class Welcome extends StatefulWidget {
@@ -23,6 +26,7 @@ class _WelcomeState extends State<Welcome> {
   @override
   void initState() {
     super.initState();
+    //
     productA = Product(
         productName: 'iphone 4',
         year: 2014,
@@ -53,7 +57,22 @@ class _WelcomeState extends State<Welcome> {
           productionDate: DateTime(2015, 10, 30)
       )
     ];
-    print('haha');
+    //check login
+    final user = UserRepository.instance
+        .getUserFromStorage()
+    .then((loggedInUser) {
+      //today - timstamp < 30 ngay = ok
+      if(loggedInUser.email.isNotEmpty) {
+        print("haha, han 30 ngay");
+        final isValidTime = loggedInUser.timestamp!.difference(DateTime.now()).inDays < 30;
+        if(loggedInUser.email.isNotEmpty && isValidTime) {
+          UserRepository.loggedInUser = loggedInUser;
+          Navigator.pushNamed(context, ScreenNames.appTab);
+        }
+      }
+    }).catchError((error) {
+
+    });
   }
   //key-value objects = Map
   @override
@@ -129,5 +148,10 @@ class _WelcomeState extends State<Welcome> {
         ),
       )
     );
+    /*
+    Barcode:
+    - From text to barcode(input product)
+    - Scan barcode to text(eg: from barcode to bank-account-number)
+    * */
   }
 }

@@ -12,7 +12,7 @@ class StudentRepository {
     - show Loading within 2 seconds
      * */
     //timer
-    return Future.delayed(const Duration(milliseconds: 15000), () {
+    return Future.delayed(const Duration(milliseconds: 2000), () {
       //Promise in js, async/await
       //Future in js, async/await
       if(x == -22) {
