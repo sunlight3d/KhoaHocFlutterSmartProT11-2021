@@ -58,6 +58,8 @@ class _WelcomeState extends State<Welcome> {
       )
     ];
     //check login
+    //how to logout ?
+    //Splash Screen
     final user = UserRepository.instance
         .getUserFromStorage()
     .then((loggedInUser) {
@@ -75,6 +77,10 @@ class _WelcomeState extends State<Welcome> {
     });
   }
   //key-value objects = Map
+  /*
+  if your app uses "SQLite"
+  - donot remove table's column
+  * */
   @override
   Widget build(BuildContext context) {
     //66, 60, 106

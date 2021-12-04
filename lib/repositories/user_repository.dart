@@ -60,7 +60,17 @@ class UserRepository {
       throw Exception('Cannot save user to local storage: ${error.toString()}');
     }
   }
-
+  Future<void> deleteUserFromStorage() async {
+    try {
+      await userStorage.ready; //async getter
+      userStorage.setItem("email", "");
+      userStorage.setItem("permission", "");
+      userStorage.setItem("userName", "");
+      UserRepository.loggedInUser = User.empty;
+    } catch(error) {
+      throw Exception('Cannot delete user from local storage: ${error.toString()}');
+    }
+  }
 }
 
 

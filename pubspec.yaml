@@ -40,6 +40,10 @@ dependencies:
   intl: ^0.17.0 #like moment.js
   qr_flutter: ^4.0.0
   qr_code_scanner: ^0.6.1
+  bloc: ^8.0.0
+  flutter_bloc: ^8.0.0
+  equatable: ^2.0.3
+
 
 dev_dependencies:
   flutter_test:

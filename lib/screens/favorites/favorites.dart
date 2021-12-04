@@ -47,15 +47,14 @@ class _FavoritesState extends State<Favorites> {
     super.initState();
     setState(() {
       _weathers = WeatherRepository.instance.getWeathers(); //sync
+      //call api
     });
-    print('kaka1');
     setState(() {
       _isLoading = true;
     });
     StudentRepository.instance.getStudents(x: 1)
           .then((responseStudents) {
         setState(() {
-          print('kaka3');
           _students = responseStudents;
           _isLoading = false;
         });

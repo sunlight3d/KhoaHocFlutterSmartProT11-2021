@@ -15,6 +15,12 @@ class MyApp extends StatelessWidget {
   - Calendar, combo-box => dang popup list.VD: chon quoc gia
   - Group button.Eg: Choose Gender && choose other radio buttons
   * */
+  /*
+  Bloc = state management
+  - Screens: Favorites, Country, Profile has some shared states
+  - Country get data from API, => it will notify Favorites, Profile
+  - Favorites, Profile receive notifications => it do somethings
+  * */
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,8 +34,8 @@ class MyApp extends StatelessWidget {
         ScreenNames.qrScan: (context) => const QRScan(),
 
       },
-      //home: Welcome(),
-      home: Barcode()
+      home: Welcome(),
+      //home: Barcode()
       //home: Login(),
       //home: Welcome(),
       //home: Country(),

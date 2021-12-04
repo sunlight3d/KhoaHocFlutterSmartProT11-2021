@@ -10,15 +10,13 @@ import 'package:training_app/utilities/utilities.dart';
 
 class Barcode extends StatefulWidget {
   const Barcode({Key? key}) : super(key: key);
-
   @override
   _BarcodeState createState() => _BarcodeState();
 }
 
 class _BarcodeState extends State<Barcode> {
   TextEditingController _txtBarcodeController = TextEditingController();
-
-
+  String _barcodeText = '';
   @override
   void dispose() {
     // TODO: implement dispose
@@ -127,12 +125,24 @@ class _BarcodeState extends State<Barcode> {
                           color: MyColors.primary
                       ),
                     )
+
                   ],
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, ScreenNames.appTab);
+                  //Intent
+                  Navigator.pushNamed(context, ScreenNames.qrScan,
+                    arguments: ScreenArguments(updateBarcodeText: (String value) {
+                      setState(() {
+                        _barcodeText = value;
+                      });
+                    }),
+                  );
                 },
-              )
+              ),
+              Text(_barcodeText,
+                  style:TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold
+                  ))
             ],
           ),
         ),
