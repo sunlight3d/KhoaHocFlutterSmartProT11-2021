@@ -57,6 +57,7 @@ class _SelectCountryState extends State<SelectCountry> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CountryBloc, CountryState>(builder: (context, countryState) {
+      print("haha");
       return AlertDialog(
           title: const Text('Select country'),
           content: Container(

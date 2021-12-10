@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_app/blocs/country/bloc.dart';
 import 'package:training_app/blocs/simple_bloc_observer.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/screens/screens.dart';
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
   * */
   @override
   Widget build(BuildContext context) {
+    print("aaa");
     return MaterialApp(
       title: 'Traing App',
       initialRoute: '/',
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
         ScreenNames.welcome: (context) => const Welcome(),
         ScreenNames.login: (context) => Login(),
         ScreenNames.favorites: (context) => const Favorites(),
-        ScreenNames.appTab: (context) => const AppTab(),
+        ScreenNames.appTab: (context) => AppTab(),
         ScreenNames.qrScan: (context) => const QRScan(),
       },
       home: Welcome(),
