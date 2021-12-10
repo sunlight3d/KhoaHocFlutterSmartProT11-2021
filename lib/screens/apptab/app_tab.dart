@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_app/blocs/country/bloc.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/constants/images.dart';
 import 'package:training_app/repositories/repositories.dart';
@@ -44,26 +46,41 @@ class _AppTabState extends State<AppTab> {
   ];
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _tabs.length,
-      child: Scaffold(
-        appBar: null,
-        bottomNavigationBar: Container(
-          color: MyColors.primary,
-          child: TabBar(
-            labelColor: Colors.white,
-            //unselectedLabelColor: Colors.white70,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorPadding: const EdgeInsets.all(5.0),
-            indicatorColor: Colors.white,
-            tabs: _tabs.map((eachTab) => Tab(
-              text: eachTab['text'],
-              icon: eachTab['icon']
-            )).toList(),
+    //create CountryBloc object when initializing AppTab
+    return BlocProvider<CountryBloc>(
+      /*
+      create: (_) {
+        //create CountryBloc
+        final _countryBloc = CountryBloc();
+        //call event => not necessary
+        _countryBloc.add(CountryEventGetAll(page: 0, limit: 10));
+        return _countryBloc;
+      },
+      */
+      //create: (_) => CountryBloc()..add(CountryEventGetAll(page: 0, limit: 10)),
+      create: (_) => CountryBloc(),
+      //when user press Button => emit event ? WHERE ?
+      child: DefaultTabController(
+        length: _tabs.length,
+        child: Scaffold(
+          appBar: null,
+          bottomNavigationBar: Container(
+            color: MyColors.primary,
+            child: TabBar(
+              labelColor: Colors.white,
+              //unselectedLabelColor: Colors.white70,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorPadding: const EdgeInsets.all(5.0),
+              indicatorColor: Colors.white,
+              tabs: _tabs.map((eachTab) => Tab(
+                  text: eachTab['text'],
+                  icon: eachTab['icon']
+              )).toList(),
+            ),
           ),
-        ),
-        body: TabBarView(
-          children: _tabs.map((eachTab) => eachTab['screen'] as Widget).toList(),
+          body: TabBarView(
+            children: _tabs.map((eachTab) => eachTab['screen'] as Widget).toList(),
+          ),
         ),
       ),
     );

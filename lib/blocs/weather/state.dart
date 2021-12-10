@@ -1,4 +1,4 @@
-part of 'weather_bloc.dart';
+part of './bloc.dart';
 
 /**
   - event: Country send event "get All Country" to Bloc

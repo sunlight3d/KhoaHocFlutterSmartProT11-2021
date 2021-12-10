@@ -1,4 +1,4 @@
-part of 'weather_bloc.dart';
+part of './bloc.dart';
 abstract class WeatherEvent extends Equatable {
   @override
   List<Object> get props => [];

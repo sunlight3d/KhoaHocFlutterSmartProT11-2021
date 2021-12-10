@@ -1,3 +1,4 @@
+//just for fun...
 import 'dart:async';
 import 'dart:convert';
 
@@ -6,8 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
-part 'weather_event.dart';
-part 'weather_state.dart';
+part './event.dart';
+part './state.dart';
 
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {

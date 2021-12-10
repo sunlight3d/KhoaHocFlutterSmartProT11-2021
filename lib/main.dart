@@ -1,9 +1,16 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:training_app/blocs/simple_bloc_observer.dart';
 import 'package:training_app/constants/constants.dart';
 import 'package:training_app/screens/screens.dart';
 
 //each screen = widget
-void main() => runApp(const MyApp()); //one-line function
+void main() {
+  BlocOverrides.runZoned
+    (() => runApp(const MyApp()),
+    blocObserver: SimpleBlocObserver()
+  );
+}
 //1 app has 1 MaterialApp widget
 //1 screen has 1 Scaffold widget
 //1 screen = 1 .dart file OR 1 folder
@@ -32,7 +39,6 @@ class MyApp extends StatelessWidget {
         ScreenNames.favorites: (context) => const Favorites(),
         ScreenNames.appTab: (context) => const AppTab(),
         ScreenNames.qrScan: (context) => const QRScan(),
-
       },
       home: Welcome(),
       //home: Barcode()
